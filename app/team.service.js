@@ -21,7 +21,7 @@ var TeamService = (function () {
       getHeroes(): Promise<Team[]> {
         return this.http.get(this.teamsUrl)
           .toPromise()
-          .then(response => response.json().data)
+          .then(response => response.json().data)np
           .catch(this.handleError);
       }
     
