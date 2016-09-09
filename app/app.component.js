@@ -9,41 +9,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var router_deprecated_1 = require('@angular/router-deprecated');
-var team_service_1 = require('./team.service');
-var team_list_component_1 = require('./team-list.component');
-var player_list_component_1 = require('./player-list.component');
-var player_detail_component_1 = require('./player-detail.component');
 var AppComponent = (function () {
     function AppComponent() {
-        this.title = 'Estadísticas LFP';
     }
     AppComponent = __decorate([
         core_1.Component({
             selector: 'my-app',
-            directives: [router_deprecated_1.ROUTER_DIRECTIVES],
-            providers: [router_deprecated_1.ROUTER_PROVIDERS, team_service_1.TeamService],
-            template: "\n    <h1>{{title}}</h1>\n    <nav>\n      <a [routerLink]=\"['Teams']\">Teams</a>\n    </nav>\n    <router-outlet></router-outlet>\n    <team-list></team-list>\n  ",
-            styleUrls: ['app/app.component.css']
-        }),
-        router_deprecated_1.RouteConfig([
-            {
-                path: '/teams',
-                name: 'Teams',
-                component: team_list_component_1.TeamListComponent,
-                useAsDefault: true
-            },
-            {
-                path: '/players/:team',
-                name: 'Players',
-                component: player_list_component_1.PlayerListComponent
-            },
-            {
-                path: '/players/:team/:id',
-                name: 'PlayerDetail',
-                component: player_detail_component_1.PlayerDetailComponent
-            }
-        ]), 
+            template: "\n      <!-- Routed views go here -->\n      <router-outlet></router-outlet>\n    "
+        }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);
     return AppComponent;

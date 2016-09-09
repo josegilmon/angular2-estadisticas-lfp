@@ -1,4 +1,9 @@
+/**
+ * Created by jagil on 7/9/16.
+ */
 export class Team {
-  id: number;
+  code: string;
   name: string;
+  links: any;
+  players: any[];
 }

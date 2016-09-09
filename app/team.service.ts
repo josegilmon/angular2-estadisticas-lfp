@@ -1,84 +1,85 @@
-import { Injectable }    from '@angular/core';
-import { Headers, Http } from '@angular/http';
-import { Observable }     from 'rxjs/Rx';
-
-import 'rxjs/add/operator/toPromise';
+/**
+ * Created by jagil on 7/9/16.
+ */
+import { Injectable } from '@angular/core';
+import { Http, Response, Headers } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 
 import { Team } from './team';
 
 @Injectable()
 export class TeamService {
 
-  private teamsUrl = 'http://api.football-data.org/v1/soccerseasons/354/fixtures/?matchday=22';  // URL to web api
+  private teamsUrl = 'http://api.football-data.org/v1/competitions/436/teams';  // URL to web api
 
   constructor(private http: Http) { }
 
-/*
-  getHeroes(): Promise<Team[]> {
-    return this.http.get(this.teamsUrl)
+  getTeams() {
+
+    let headers = new Headers({
+      'X-Auth-Token': '97a03c48247f456f8d1d9c8fd7de5ce6'
+    });
+
+    return this.http.get(this.teamsUrl, { headers })
+      .map( (response: Response) => response.json() )
       .toPromise()
-      .then(response => response.json().data)
-      .catch(this.handleError);
+      .catch( (err: any) => {
+        console.log(err);
+        return Promise.reject(err);
+      });
   }
 
-  getHero(id: number) {
-    return this.getHeroes()
-      .then(heroes => heroes.filter(hero => hero.id === id)[0]);
-  }
- */
-  getHeroes(): Observable<Team[]> {
-    return this.http.get(this.teamsUrl)
-      .map(
-        response => response.json().data
-      )
-      .catch(this.handleError);
+  getTeam(id: string) {
+    return this.getTeams()
+      .then( data => {
+        let teams = data.teams.filter((team: Team) => team.code == id);
+        return teams[0];
+      } );
   }
 
-  save(hero: Team): Promise<Team>  {
-    if (hero.id) {
-      return this.put(hero);
-    }
-    return this.post(hero);
-  }
-
-  delete(hero: Team) {
+  /*
+  delete(team: Team): Promise<void> {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    let url = `${this.teamsUrl}/${hero.id}`;
+    let url = `${this.teamsUrl}/${team.code}`;
     return this.http
       .delete(url, headers)
       .toPromise()
+      .then(() => null)
       .catch(this.handleError);
   }
 
+  save(team: Team): Promise<Team>  {
+    if (team.code) {
+      return this.put(team);
+    }
+    return this.post(team);
+  }
+
   // Add new Team
-  private post(hero: Team): Promise<Team> {
+  private post(team: Team): Promise<Team> {
     let headers = new Headers({
       'Content-Type': 'application/json'});
     return this.http
-      .post(this.teamsUrl, JSON.stringify(hero), {headers: headers})
+      .post(this.teamsUrl, JSON.stringify(team), {headers: headers})
       .toPromise()
       .then(res => res.json().data)
       .catch(this.handleError);
   }
 
   // Update existing Team
-  private put(hero: Team) {
+  private put(team: Team) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    let url = `${this.teamsUrl}/${hero.id}`;
+    let url = `${this.teamsUrl}/${team.code}`;
     return this.http
-      .put(url, JSON.stringify(hero), {headers: headers})
+      .put(url, JSON.stringify(team), {headers: headers})
       .toPromise()
-      .then(() => hero)
+      .then(() => team)
       .catch(this.handleError);
   }
-/*
-  private handleError(error: any) {
-    console.error('An error occurred', error);
-    return Promise.reject(error.message || error);
-  }
-*/
+  */
+
   private handleError(error: any) {
     console.error('An error occurred', error);
     return Observable.throw(error.message || error);

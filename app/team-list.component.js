@@ -8,22 +8,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+/**
+ * Created by jagil on 7/9/16.
+ */
 var core_1 = require('@angular/core');
-var router_deprecated_1 = require('@angular/router-deprecated');
+var router_1 = require('@angular/router');
 var team_service_1 = require('./team.service');
 var TeamListComponent = (function () {
     function TeamListComponent(router, teamService) {
         this.router = router;
         this.teamService = teamService;
-        this.teams = [];
     }
     TeamListComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.teamService.getHeroes()
-            .subscribe(function (teams) { return _this.teams = teams; });
+        this.teamService.getTeams()
+            .then(function (data) {
+            _this.teams = data.teams;
+            console.log(_this.teams);
+        });
     };
     TeamListComponent.prototype.gotoDetail = function (team) {
-        var link = ['Players', { id: team.id }];
+        var link = ['team', team.code];
         this.router.navigate(link);
     };
     TeamListComponent = __decorate([
@@ -32,7 +37,7 @@ var TeamListComponent = (function () {
             templateUrl: 'app/team-list.component.html',
             styleUrls: ['app/team-list.component.css']
         }), 
-        __metadata('design:paramtypes', [router_deprecated_1.Router, team_service_1.TeamService])
+        __metadata('design:paramtypes', [router_1.Router, team_service_1.TeamService])
     ], TeamListComponent);
     return TeamListComponent;
 }());

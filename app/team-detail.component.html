@@ -1,0 +1,9 @@
+<h2>{{team.name}}</h2>
+<ul class="heroes">
+  <li *ngFor="let player of team.players">
+    <span class="hero-element">
+      <span class="badge">{{player.jerseyNumber}}</span> {{player.name}}
+    </span>
+    <!--button class="delete-button" (click)="delete(hero, $event)">Delete</button-->
+  </li>
+</ul>

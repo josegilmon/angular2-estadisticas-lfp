@@ -8,74 +8,77 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+/**
+ * Created by jagil on 7/9/16.
+ */
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 var Rx_1 = require('rxjs/Rx');
-require('rxjs/add/operator/toPromise');
 var TeamService = (function () {
     function TeamService(http) {
         this.http = http;
-        this.teamsUrl = 'http://api.football-data.org/v1/soccerseasons/354/fixtures/?matchday=22'; // URL to web api
+        this.teamsUrl = 'http://api.football-data.org/v1/competitions/436/teams'; // URL to web api
     }
-    /*
-      getHeroes(): Promise<Team[]> {
-        return this.http.get(this.teamsUrl)
-          .toPromise()
-          .then(response => response.json().data)
-          .catch(this.handleError);
-      }
-    
-      getHero(id: number) {
-        return this.getHeroes()
-          .then(heroes => heroes.filter(hero => hero.id === id)[0]);
-      }
-     */
-    TeamService.prototype.getHeroes = function () {
-        return this.http.get(this.teamsUrl)
-            .map(function (response) { return response.json().data; })
-            .catch(this.handleError);
-    };
-    TeamService.prototype.save = function (hero) {
-        if (hero.id) {
-            return this.put(hero);
-        }
-        return this.post(hero);
-    };
-    TeamService.prototype.delete = function (hero) {
-        var headers = new http_1.Headers();
-        headers.append('Content-Type', 'application/json');
-        var url = this.teamsUrl + "/" + hero.id;
-        return this.http
-            .delete(url, headers)
-            .toPromise()
-            .catch(this.handleError);
-    };
-    // Add new Team
-    TeamService.prototype.post = function (hero) {
+    TeamService.prototype.getTeams = function () {
         var headers = new http_1.Headers({
-            'Content-Type': 'application/json' });
-        return this.http
-            .post(this.teamsUrl, JSON.stringify(hero), { headers: headers })
+            'X-Auth-Token': '97a03c48247f456f8d1d9c8fd7de5ce6'
+        });
+        return this.http.get(this.teamsUrl, { headers: headers })
+            .map(function (response) { return response.json(); })
             .toPromise()
-            .then(function (res) { return res.json().data; })
-            .catch(this.handleError);
+            .catch(function (err) {
+            console.log(err);
+            return Promise.reject(err);
+        });
     };
-    // Update existing Team
-    TeamService.prototype.put = function (hero) {
-        var headers = new http_1.Headers();
-        headers.append('Content-Type', 'application/json');
-        var url = this.teamsUrl + "/" + hero.id;
-        return this.http
-            .put(url, JSON.stringify(hero), { headers: headers })
-            .toPromise()
-            .then(function () { return hero; })
-            .catch(this.handleError);
+    TeamService.prototype.getTeam = function (id) {
+        return this.getTeams()
+            .then(function (data) {
+            var teams = data.teams.filter(function (team) { return team.code == id; });
+            return teams[0];
+        });
     };
     /*
-      private handleError(error: any) {
-        console.error('An error occurred', error);
-        return Promise.reject(error.message || error);
+    delete(team: Team): Promise<void> {
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      let url = `${this.teamsUrl}/${team.code}`;
+      return this.http
+        .delete(url, headers)
+        .toPromise()
+        .then(() => null)
+        .catch(this.handleError);
+    }
+  
+    save(team: Team): Promise<Team>  {
+      if (team.code) {
+        return this.put(team);
       }
+      return this.post(team);
+    }
+  
+    // Add new Team
+    private post(team: Team): Promise<Team> {
+      let headers = new Headers({
+        'Content-Type': 'application/json'});
+      return this.http
+        .post(this.teamsUrl, JSON.stringify(team), {headers: headers})
+        .toPromise()
+        .then(res => res.json().data)
+        .catch(this.handleError);
+    }
+  
+    // Update existing Team
+    private put(team: Team) {
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      let url = `${this.teamsUrl}/${team.code}`;
+      return this.http
+        .put(url, JSON.stringify(team), {headers: headers})
+        .toPromise()
+        .then(() => team)
+        .catch(this.handleError);
+    }
     */
     TeamService.prototype.handleError = function (error) {
         console.error('An error occurred', error);

@@ -1,5 +1,8 @@
+/**
+ * Created by jagil on 7/9/16.
+ */
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router-deprecated';
+import { Router } from '@angular/router';
 
 import { Team } from './team';
 import { TeamService } from './team.service';
@@ -12,7 +15,7 @@ import { TeamService } from './team.service';
 
 export class TeamListComponent implements OnInit {
 
-  teams: Team[] = [];
+  teams: Team[];
 
   constructor(
     private router: Router,
@@ -20,14 +23,17 @@ export class TeamListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.teamService.getHeroes()
-      .subscribe(
-        teams => this.teams = teams
+    this.teamService.getTeams()
+      .then(
+        data => {
+          this.teams = data.teams
+          console.log( this.teams )
+        }
       );
   }
 
   gotoDetail(team: Team) {
-    let link = ['Players', { id: team.id }];
+    let link = ['team', team.code];
     this.router.navigate(link);
   }
 }

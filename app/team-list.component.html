@@ -1,6 +1,7 @@
 <h3>Equipos</h3>
 <div class="grid grid-pad">
-  <div *ngFor="let team of teams" (click)="gotoDetail(team)" class="col-1-4">
-    <!--team-detail (team)="{team}"></team-detail-->
-  </div>
+    <div *ngFor="let team of teams" (click)="gotoDetail(team)" class="col-1-4">
+        <!--team-detail (team)="{team}"></team-detail-->
+        <div>{{team.name}}</div>
+    </div>
 </div>
